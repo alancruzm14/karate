@@ -1,0 +1,73 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		//("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+//apply plugin: 'org.springframework.boot'
+//apply plugin: 'io.spring.dependency-management'
+
+
+group = 'com.bazdig.qa'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	//compile('org.springframework.boot:spring-boot-starter')
+	compile 'commons-io:commons-io:2.5'
+	testCompile 'com.intuit.karate:karate-junit4:0.8.0'
+    testCompile 'com.intuit.karate:karate-apache:0.8.0'
+    compile 'com.intuit.karate:karate-junit4:0.8.0'
+    compile 'com.intuit.karate:karate-apache:0.8.0'
+    compile 'net.masterthought:cucumber-reporting:3.8.0' 
+    testCompile 'net.masterthought:cucumber-reporting:3.8.0' 
+    
+    testCompile 'junit:junit:4.4'
+    compile 'junit:junit:4.4'
+    compile 'com.github.java-json-tools:json-schema-validator:2.2.8'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.bazdig.qa.startMain.MainApplication"
+        attributes 'Class-Path': configurations.runtime.collect{it.name}.join(' ')
+    }
+ 
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ["src/main/java"]
+            }
+            resources {
+                srcDirs = ["src/main/resources", "src/main/java"]
+            }
+        }
+    }
+    
+task runApp(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'com.bazdig.qa.startMain.MainApplication'
+
+  // arguments to pass to the application
+  args ''
+}
